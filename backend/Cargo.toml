@@ -14,3 +14,4 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 #shared types
 data-comparer-shared = { path = "../shared" }
+csv = "1.4.0"

@@ -1,0 +1,9 @@
+[package]
+name = "data-comparer-frontend"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+console_error_panic_hook = "0.1"
+leptos = { version = "0.8", features = ["csr"] }

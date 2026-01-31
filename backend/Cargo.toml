@@ -1,0 +1,32 @@
+[package]
+name = "data-comparer-backend"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[dependencies]
+axum = { version = "0.8", features = ["multipart"] }
+tokio = { version = "1.44", features = ["full"] }
+tower = { version = "0.5", features = ["util"] }
+tower-http = { version = "0.6", features = ["fs", "cors", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+
+#shared types
+data-comparer-shared = { path = "../shared" }
+csv = "1.4.0"
+
+#Error handling
+anyhow = "1.0"
+thiserror = "2.0"
+
+serde.workspace = true
+serde_json.workspace = true
+
+[[bin]]
+name = "data-comparer-backend"
+path = "src/main.rs"
+
+[[bin]]
+name = "test-csv"
+path = "src/test_csv.rs"

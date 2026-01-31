@@ -1,1 +1,5 @@
 /target
+
+# frontend build output
+frontend/dist/
+

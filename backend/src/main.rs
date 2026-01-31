@@ -4,6 +4,8 @@ use tokio::net::TcpListener;
 use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber;
 
+mod parsers;
+
 #[tokio::main]
 async fn main() {
     tracing_subscriber::fmt::init();

@@ -9,3 +9,5 @@ axum = { version = "0.8", features = ["multipart"] }
 tokio = { version = "1.44", features = ["full"] }
 tower = { version = "0.5", features = ["util"] }
 tower-http = { version = "0.6", features = ["fs", "cors", "trace"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }

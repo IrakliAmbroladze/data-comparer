@@ -3,6 +3,8 @@ use leptos::{ev::Event, logging::log, prelude::*};
 
 #[component]
 pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) -> impl IntoView {
+    let (loading, set_loading) = signal(false);
+
     let on_file_change = move |ev: Event| {
         log!("file changed");
     };
@@ -15,7 +17,7 @@ pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) ->
                 on:change=on_file_change
             />
             <button>
-                {move || if true {"Uploading..."} else { "Upload" }}
+                {move || if loading.get() {"Uploading..."} else { "Upload" }}
             </button>
         </div>
     }

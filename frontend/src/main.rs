@@ -14,7 +14,8 @@ fn App() -> impl IntoView {
 
             <main>
                 <p>"Frontend is ready"</p>
-                    <FileUpload />
+                    <FileUpload dataset_name="Dataset 1 (Sales)".to_string()/>
+                    <FileUpload dataset_name="Dataset 2 (Payments)".to_string()/>
                 <div class="upload-section">
                 </div>
             </main>

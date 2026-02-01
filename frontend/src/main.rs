@@ -1,5 +1,8 @@
 use leptos::prelude::*;
 
+mod components;
+use components::file_upload::FileUpload;
+
 #[component]
 fn App() -> impl IntoView {
     view! {
@@ -11,6 +14,9 @@ fn App() -> impl IntoView {
 
             <main>
                 <p>"Frontend is ready"</p>
+                    <FileUpload />
+                <div class="upload-section">
+                </div>
             </main>
         </div>
     }

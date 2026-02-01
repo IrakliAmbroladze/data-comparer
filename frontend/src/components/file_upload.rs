@@ -9,6 +9,9 @@ pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) ->
     let on_file_change = move |ev: Event| {
         log!("file changed");
     };
+
+    let upload_file = move |_| set_loading.update(|prev| *prev = !*prev);
+
     view! {
         <div class="file-upload">
             <h3>{dataset_name}</h3>
@@ -17,7 +20,9 @@ pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) ->
                 accept=".csv,.xlsx,.xlsm"
                 on:change=on_file_change
             />
-            <button>
+            <button
+                on:click=upload_file
+            >
                 {move || if loading.get() {"Uploading..."} else { "Upload" }}
             </button>
 

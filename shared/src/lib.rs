@@ -51,3 +51,19 @@ impl Dataset {
         }
     }
 }
+
+impl ComparisonResult {
+    pub fn new() -> Self {
+        Self {
+            matched: Vec::new(),
+            unmatched_from_first: Vec::new(),
+            unmatched_from_second: Vec::new(),
+        }
+    }
+}
+
+impl Default for ComparisonResult {
+    fn default() -> Self {
+        Self::new()
+    }
+}

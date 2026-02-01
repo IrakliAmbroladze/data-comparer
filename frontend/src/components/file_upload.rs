@@ -14,6 +14,9 @@ pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) ->
                 accept=".csv,.xlsx,.xlsm"
                 on:change=on_file_change
             />
+            <button>
+                {move || if true {"Uploading..."} else { "Upload" }}
+            </button>
         </div>
     }
 }

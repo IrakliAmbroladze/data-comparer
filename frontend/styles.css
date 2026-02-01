@@ -1,0 +1,38 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+header {
+  text-align: center;
+}
+.upload-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.file-upload {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+}
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.error {
+  color: red;
+}
+input[type="file"] {
+  margin: 10px 0;
+}

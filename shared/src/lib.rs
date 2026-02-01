@@ -13,6 +13,26 @@ pub struct Dataset {
     pub records: Vec<Record>,
 }
 
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ComparisonResult {
+    pub matched: Vec<MatchedRecord>,
+    pub unmatched_from_first: Vec<Record>,
+    pub unmatched_from_second: Vec<Record>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct MatchedRecord {
+    pub id: String,
+
+    pub first_name: String,
+    pub first_amount: f64,
+
+    pub second_name: String,
+    pub second_amount: f64,
+
+    pub amount_difference: f64,
+}
+
 impl Record {
     pub fn new(id: String, name: String, amount: f64) -> Self {
         Self { id, name, amount }
@@ -29,5 +49,21 @@ impl Dataset {
             name,
             records: Vec::new(),
         }
+    }
+}
+
+impl ComparisonResult {
+    pub fn new() -> Self {
+        Self {
+            matched: Vec::new(),
+            unmatched_from_first: Vec::new(),
+            unmatched_from_second: Vec::new(),
+        }
+    }
+}
+
+impl Default for ComparisonResult {
+    fn default() -> Self {
+        Self::new()
     }
 }

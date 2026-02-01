@@ -36,3 +36,7 @@ path = "src/test_csv.rs"
 [[bin]]
 name = "test-excel"
 path = "src/test_excel.rs"
+
+[[bin]]
+name = "test-comparison"
+path = "src/test_comparison.rs"

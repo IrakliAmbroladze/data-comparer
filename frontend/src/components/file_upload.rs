@@ -5,6 +5,12 @@ use std::{cell::RefCell, rc::Rc};
 use wasm_bindgen::JsCast;
 use web_sys::FormData;
 
+fn api_url() -> String {
+    option_env!("TRUNK_PUBLIC_API_URL")
+        .unwrap_or("http://localhost:3000")
+        .to_string()
+}
+
 #[component]
 pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) -> impl IntoView {
     let file_ref = Rc::new(RefCell::new(None::<web_sys::File>));
@@ -42,7 +48,7 @@ pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) ->
                     let form_data = FormData::new().unwrap();
                     form_data.append_with_blob("file", &file).unwrap();
 
-                    let response = Request::post("http://localhost:3000/upload")
+                    let response = Request::post(&format!("{}/upload", api_url()))
                         .body(form_data)
                         .expect("Failed to build request")
                         .send()

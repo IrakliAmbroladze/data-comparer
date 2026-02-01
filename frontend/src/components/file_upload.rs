@@ -33,21 +33,12 @@ pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) ->
     view! {
         <div class="file-upload">
             <h3>{dataset_name}</h3>
-            <input
-                type="file"
-                accept=".csv,.xlsx,.xlsm"
-                on:change=on_file_change
-            />
-            <button
-                on:click=upload_file
-                 disabled=move || !has_file.get() || loading.get()
-            >
-                {move || if loading.get() {"Uploading..."} else { "Upload" }}
+            <input type="file" accept=".csv,.xlsx,.xlsm" on:change=on_file_change />
+            <button on:click=upload_file disabled=move || !has_file.get() || loading.get()>
+                {move || if loading.get() { "Uploading..." } else { "Upload" }}
             </button>
 
-            {move || error.get().map(|e| view! {
-                <p class="error">{e}</p>
-            })}
+            {move || error.get().map(|e| view! { <p class="error">{e}</p> })}
         </div>
     }
 }

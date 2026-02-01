@@ -26,12 +26,16 @@ fn App() -> impl IntoView {
                         dataset_name="Dataset 2 (Payments)".to_string()
                     />
                 </div>
-                {move || dataset1.get().map(|ds| view! {
-                    <p>"Dataset 1: " {ds.records.len()} " records"</p>
-                })}
-                {move || dataset2.get().map(|ds| view! {
-                    <p>"Dataset 2: " {ds.records.len()} " records"</p>
-                })}
+                {move || {
+                    dataset1
+                        .get()
+                        .map(|ds| view! { <p>"Dataset 1: " {ds.records.len()} " records"</p> })
+                }}
+                {move || {
+                    dataset2
+                        .get()
+                        .map(|ds| view! { <p>"Dataset 2: " {ds.records.len()} " records"</p> })
+                }}
 
             </main>
         </div>
@@ -40,5 +44,5 @@ fn App() -> impl IntoView {
 
 fn main() {
     console_error_panic_hook::set_once();
-    leptos::mount::mount_to_body(|| view! { <App/> });
+    leptos::mount::mount_to_body(|| view! { <App /> });
 }

@@ -1,7 +1,7 @@
-use std::{cell::RefCell, rc::Rc};
-
 use data_comparer_shared::Dataset;
-use leptos::{ev::Event, logging::log, prelude::*};
+use leptos::{ev::Event, prelude::*};
+use std::{cell::RefCell, rc::Rc};
+use wasm_bindgen::JsCast;
 
 #[component]
 pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) -> impl IntoView {
@@ -10,8 +10,22 @@ pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) ->
     let (loading, set_loading) = signal(false);
     let (error, set_error) = signal(None::<String>);
 
-    let on_file_change = move |ev: Event| {
-        log!("file changed");
+    let on_file_change = {
+        let file_ref = file_ref.clone();
+        move |ev: Event| {
+            let input = ev
+                .target()
+                .unwrap()
+                .dyn_into::<web_sys::HtmlInputElement>()
+                .unwrap();
+            if let Some(files) = input.files() {
+                if let Some(f) = files.get(0) {
+                    *file_ref.borrow_mut() = Some(f);
+                    set_has_file.set(true);
+                    set_error.set(None);
+                }
+            }
+        }
     };
 
     let upload_file = move |_| set_loading.update(|prev| *prev = !*prev);

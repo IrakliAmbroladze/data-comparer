@@ -3,3 +3,7 @@
 # frontend build output
 frontend/dist/
 
+# env files
+**/.env
+**/.env.*
+

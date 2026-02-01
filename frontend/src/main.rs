@@ -8,6 +8,12 @@ mod components;
 use components::file_upload::FileUpload;
 use components::results_display::ResultsDisplay;
 
+fn api_url() -> String {
+    option_env!("TRUNK_PUBLIC_API_URL")
+        .unwrap_or("http://localhost:3000")
+        .to_string()
+}
+
 #[component]
 fn App() -> impl IntoView {
     let (dataset1, set_dataset1) = signal(None::<Dataset>);
@@ -25,7 +31,7 @@ fn App() -> impl IntoView {
                     "dataset2": ds2,
                 });
 
-                let response = Request::post("http://localhost:3000/compare")
+                let response = Request::post(&format!("{}/compare", api_url()))
                     .header("Content-Type", "application/json")
                     .body(body.to_string())
                     .expect("Failed to build request")

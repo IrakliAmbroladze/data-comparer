@@ -1,0 +1,11 @@
+# flyctl launch added from .gitignore
+target
+
+# frontend build output
+**/frontend/dist
+
+# env files
+**/**/.env
+**/**/.env.*
+
+fly.toml

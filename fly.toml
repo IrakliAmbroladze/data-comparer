@@ -1,25 +1,27 @@
-app = "data-comparer-backend"
-primary_region = "fra"
+# fly.toml app configuration file generated for data-comparer-backend on 2026-02-01T23:05:55+04:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = 'data-comparer-backend'
+primary_region = 'fra'
 
 [build]
 
 [http_service]
   internal_port = 3000
   force_https = true
-
-  auto_stop_machines = true
+  auto_stop_machines = 'stop'
   auto_start_machines = true
   min_machines_running = 0
+  processes = ['app']
 
-  processes = ["app"]
-
-[http_service.concurrency]
-  type = "connections"
-  soft_limit = 20
-  hard_limit = 25
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 25
+    soft_limit = 20
 
 [[vm]]
-  memory = "256mb"
-  cpu_kind = "shared"
+  memory = '256mb'
   cpus = 1
-
+  memory_mb = 256

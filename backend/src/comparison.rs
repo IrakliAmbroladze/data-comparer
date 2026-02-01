@@ -32,3 +32,37 @@ pub fn compare_datasets(dataset1: Dataset, dataset2: Dataset) -> ComparisonResul
 
     result
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use data_comparer_shared::Record;
+
+    #[test]
+    fn test_comparison() {
+        let ds1 = Dataset::new(
+            "Sales".to_string(),
+            vec![
+                Record::new("123".to_string(), "A".to_string(), 1000.0),
+                Record::new("456".to_string(), "B".to_string(), 2000.0),
+                Record::new("789".to_string(), "C".to_string(), 3000.0),
+            ],
+        );
+
+        let ds2 = Dataset::new(
+            "Payments".to_string(),
+            vec![
+                Record::new("123".to_string(), "A".to_string(), 1500.0),
+                Record::new("456".to_string(), "B".to_string(), 2000.0),
+                Record::new("999".to_string(), "D".to_string(), 4000.0),
+            ],
+        );
+
+        let result = compare_datasets(ds1, ds2);
+
+        assert_eq!(result.matched.len(), 2);
+        assert_eq!(result.unmatched_from_first.len(), 1);
+        assert_eq!(result.unmatched_from_second.len(), 1);
+        assert_eq!(result.matched[0].amount_difference, 500.0);
+    }
+}

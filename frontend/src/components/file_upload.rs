@@ -3,6 +3,7 @@ use leptos::{ev::Event, logging::log, prelude::*};
 
 #[component]
 pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) -> impl IntoView {
+    let (has_file, set_has_file) = signal(false);
     let (loading, set_loading) = signal(false);
     let (error, set_error) = signal(None::<String>);
 
@@ -22,6 +23,7 @@ pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) ->
             />
             <button
                 on:click=upload_file
+                 disabled=move || !has_file.get() || loading.get()
             >
                 {move || if loading.get() {"Uploading..."} else { "Upload" }}
             </button>

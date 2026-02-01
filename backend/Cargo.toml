@@ -14,7 +14,9 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 
 #shared types
 data-comparer-shared = { path = "../shared" }
+
 csv = "1.4.0"
+calamine = "0.32.0"
 
 #Error handling
 anyhow = "1.0"
@@ -30,3 +32,7 @@ path = "src/main.rs"
 [[bin]]
 name = "test-csv"
 path = "src/test_csv.rs"
+
+[[bin]]
+name = "test-excel"
+path = "src/test_excel.rs"

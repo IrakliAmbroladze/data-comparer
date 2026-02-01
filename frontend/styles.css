@@ -1,0 +1,67 @@
+body {
+  font-family: Arial, sans-serif;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+header {
+  text-align: center;
+}
+.upload-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.file-upload {
+  border: 1px solid #ccc;
+  padding: 20px;
+  border-radius: 8px;
+}
+button {
+  padding: 10px 20px;
+  cursor: pointer;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.error {
+  color: red;
+}
+input[type="file"] {
+  margin: 10px 0;
+}
+.compare-btn {
+  margin: 20px 0;
+  padding: 15px 30px;
+  font-size: 16px;
+}
+.status {
+  margin: 20px 0;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+th {
+  background-color: #f2f2f2;
+}
+.diff {
+  color: red;
+  font-weight: bold;
+}
+section {
+  margin: 30px 0;
+}

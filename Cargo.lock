@@ -453,7 +453,11 @@ name = "data-comparer-frontend"
 version = "0.1.0"
 dependencies = [
  "console_error_panic_hook",
+ "data-comparer-shared",
+ "gloo-net",
  "leptos",
+ "wasm-bindgen",
+ "web-sys",
 ]
 
 [[package]]

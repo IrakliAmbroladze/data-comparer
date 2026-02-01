@@ -60,12 +60,15 @@ fn cell_to_f64(cell: &Data) -> anyhow::Result<f64> {
 mod tests {
     use super::*;
     use std::fs::File;
+    use std::io::Read;
 
     #[test]
     fn test_parse_excel() {
-        let file = File::open("test_data.xlsx");
-        if let Ok(f) = file {
-            let result = parse_excel(f, "Test".to_string()).unwrap();
+        let mut file = File::open("test_data.xlsx");
+        if let Ok(mut f) = file {
+            let mut buffer = Vec::new();
+            f.read_to_end(&mut buffer).unwrap();
+            let result = parse_excel(std::io::Cursor::new(buffer), "Test".to_string()).unwrap();
             assert!(result.records.len() > 0);
         }
     }

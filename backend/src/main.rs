@@ -13,6 +13,7 @@ mod parsers;
 
 #[tokio::main]
 async fn main() {
+    dotenvy::dotenv().ok();
     tracing_subscriber::fmt::init();
     let app: Router = Router::new()
         .route("/", get(root))
@@ -25,7 +26,11 @@ async fn main() {
                 .allow_methods(Any)
                 .allow_headers(Any),
         );
-    let addr: SocketAddr = SocketAddr::from(([127, 0, 0, 1], 3000));
+
+    let host = std::env::var("HOST").unwrap_or_else(|_| "127.0.0.1".to_string());
+    let port = std::env::var("PORT").unwrap_or_else(|_| "3000".to_string());
+    let addr = format!("{}:{}", host, port).parse::<SocketAddr>().unwrap();
+
     tracing::info!("Backend server listening on {}", addr);
 
     let listener: TcpListener = tokio::net::TcpListener::bind(addr).await.unwrap();

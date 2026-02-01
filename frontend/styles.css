@@ -58,8 +58,12 @@ td {
 th {
   background-color: #f2f2f2;
 }
-.diff {
+.diff-red {
   color: red;
+  font-weight: bold;
+}
+.diff-green {
+  color: #097969;
   font-weight: bold;
 }
 section {

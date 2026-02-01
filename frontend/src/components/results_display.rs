@@ -39,10 +39,10 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                         <td>{format!("{:.2}", first_amount)}</td>
                                         <td>{second_name}</td>
                                         <td>{format!("{:.2}", second_amount)}</td>
-                                        <td class=if diff != 0.0 {
-                                            "diff"
+                                        <td class=if diff < 0.0 {
+                                            "diff-red"
                                         } else {
-                                            ""
+                                            "diff-green"
                                         }>{format!("{:.2}", diff)}</td>
                                     </tr>
                                 }

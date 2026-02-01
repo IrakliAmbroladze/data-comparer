@@ -1,8 +1,11 @@
+use std::{cell::RefCell, rc::Rc};
+
 use data_comparer_shared::Dataset;
 use leptos::{ev::Event, logging::log, prelude::*};
 
 #[component]
 pub fn FileUpload(on_dataset_loaded: Callback<Dataset>, dataset_name: String) -> impl IntoView {
+    let file_ref = Rc::new(RefCell::new(None::<web_sys::File>));
     let (has_file, set_has_file) = signal(false);
     let (loading, set_loading) = signal(false);
     let (error, set_error) = signal(None::<String>);

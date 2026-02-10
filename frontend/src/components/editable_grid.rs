@@ -20,6 +20,24 @@ pub fn EditableGrid(
         let data = grid_data.get();
         on_data_change.run(data);
     });
+
+    let update_cell = move |row_idx: usize, field: String, value: String| {
+        set_grid_data.update(|data| {
+            if let Some(record) = data.get_mut(row_idx) {
+                match field.as_str() {
+                    "id" => record.id = value,
+                    "name" => record.name = value,
+                    "amount" => {
+                        if let Ok(amt) = value.parse::<f64>() {
+                            record.amount = amt;
+                        }
+                    }
+                    _ => {}
+                }
+            }
+        });
+    };
+
     view! {
         <div class="editable-grid">
             <h3>{dataset_name}</h3>
@@ -32,17 +50,59 @@ pub fn EditableGrid(
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>
-                            <input type="text" value=1 />
-                        </td>
-                        <td>
-                            <input type="text" value="Irakli" />
-                        </td>
-                        <td>
-                            <input type="number" step="0.01" value=120 />
-                        </td>
-                    </tr>
+                    <For
+                        each=move || grid_data.get().into_iter().enumerate()
+                        key=|(idx, _)| *idx
+                        children=move |(row_idx, record)| {
+                            let id_val = record.id.clone();
+                            let name_val = record.name.clone();
+                            let amount_val = record.amount;
+                            view! {
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            value=id_val
+                                            on:input=move |ev| {
+                                                update_cell(
+                                                    row_idx,
+                                                    "id".to_string(),
+                                                    event_target_value(&ev),
+                                                );
+                                            }
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="text"
+                                            value=name_val
+                                            on:input=move |ev| {
+                                                update_cell(
+                                                    row_idx,
+                                                    "name".to_string(),
+                                                    event_target_value(&ev),
+                                                );
+                                            }
+                                        />
+                                    </td>
+                                    <td>
+                                        <input
+                                            type="number"
+                                            step="0.01"
+                                            value=amount_val
+                                            on:input=move |ev| {
+                                                update_cell(
+                                                    row_idx,
+                                                    "amount".to_string(),
+                                                    event_target_value(&ev),
+                                                );
+                                            }
+                                        />
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    />
                 </tbody>
             </table>
         </div>

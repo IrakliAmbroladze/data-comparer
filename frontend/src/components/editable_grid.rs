@@ -1,7 +1,25 @@
+use data_comparer_shared::Record;
 use leptos::prelude::*;
 
 #[component]
-pub fn EditableGrid(dataset_name: String) -> impl IntoView {
+pub fn EditableGrid(
+    dataset_name: String,
+    initial_data: Signal<Vec<Record>>,
+    on_data_change: Callback<Vec<Record>>,
+) -> impl IntoView {
+    let (grid_data, set_grid_data) = signal(Vec::<Record>::new());
+
+    Effect::new(move |_| {
+        let data = initial_data.get();
+        if !data.is_empty() {
+            set_grid_data.set(data);
+        }
+    });
+
+    Effect::new(move |_| {
+        let data = grid_data.get();
+        on_data_change.run(data);
+    });
     view! {
         <div class="editable-grid">
             <h3>{dataset_name}</h3>

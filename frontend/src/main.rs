@@ -68,17 +68,22 @@ fn App() -> impl IntoView {
 
             <main>
                 <div class="upload-section">
-                    <FileUpload
-                        on_dataset_loaded=Callback::new(move |ds| set_dataset1.set(Some(ds)))
-                        dataset_name="Dataset 1 (Sales)".to_string()
-                    />
+                    <div>
+                        <FileUpload
+                            on_dataset_loaded=Callback::new(move |ds| set_dataset1.set(Some(ds)))
+                            dataset_name="Dataset 1 (Sales)".to_string()
+                        />
 
-                    <FileUpload
-                        on_dataset_loaded=Callback::new(move |ds| set_dataset2.set(Some(ds)))
-                        dataset_name="Dataset 2 (Payments)".to_string()
-                    />
-                    <EditableGrid dataset_name="Dataset 1".to_string() />
-                    <EditableGrid dataset_name="Dataset 2".to_string() />
+                        <EditableGrid dataset_name="Dataset 1".to_string() />
+                    </div>
+
+                    <div>
+                        <FileUpload
+                            on_dataset_loaded=Callback::new(move |ds| set_dataset2.set(Some(ds)))
+                            dataset_name="Dataset 2 (Payments)".to_string()
+                        />
+                        <EditableGrid dataset_name="Dataset 2".to_string() />
+                    </div>
                 </div>
 
                 <div class="status">

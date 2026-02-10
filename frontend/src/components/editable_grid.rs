@@ -38,6 +38,12 @@ pub fn EditableGrid(
         });
     };
 
+    let add_row = move |_| {
+        set_grid_data.update(|data| {
+            data.push(Record::new(String::new(), String::new(), 0.0));
+        });
+    };
+
     view! {
         <div class="editable-grid">
             <h3>{dataset_name}</h3>
@@ -105,7 +111,9 @@ pub fn EditableGrid(
                     />
                 </tbody>
             </table>
-            <button class="add-row-btn">"+ Add Row"</button>
+            <button on:click=add_row class="add-row-btn">
+                "+ Add Row"
+            </button>
         </div>
     }
 }

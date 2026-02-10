@@ -17,11 +17,8 @@ fn api_url() -> String {
 
 #[component]
 fn App() -> impl IntoView {
-    let (uploaded_data1, set_uploaded_data1) = signal(Vec::<Record>::new());
-    let (uploaded_data2, set_uploaded_data2) = signal(Vec::<Record>::new());
-
-    let (grid_data1, set_grid_data1) = signal(Vec::<Record>::new());
-    let (grid_data2, set_grid_data2) = signal(Vec::<Record>::new());
+    let grid_data1 = RwSignal::new(Vec::<Record>::new());
+    let grid_data2 = RwSignal::new(Vec::<Record>::new());
 
     let (result, set_result) = signal(None::<ComparisonResult>);
     let (loading, set_loading) = signal(false);
@@ -72,17 +69,9 @@ fn App() -> impl IntoView {
     };
 
     let clear = move |_| {
-        set_loading.set(true);
-
-        set_uploaded_data1.set(Vec::<Record>::new());
-        set_uploaded_data2.set(Vec::<Record>::new());
-
-        set_grid_data1.set(Vec::<Record>::new());
-        set_grid_data2.set(Vec::<Record>::new());
-
+        grid_data1.set(vec![]);
+        grid_data2.set(vec![]);
         set_result.set(None);
-
-        set_loading.set(false);
     };
 
     view! {
@@ -105,53 +94,25 @@ fn App() -> impl IntoView {
             <main>
                 <div class="upload-section">
                     <div>
-                        <Show when=move || grid_data1.get().is_empty() fallback=|| view! { <></> }>
-                            <FileUpload
-                                on_dataset_loaded=Callback::new(move |ds: Dataset| {
-                                    set_uploaded_data1.set(ds.records);
-                                })
-                                dataset_name="Dataset 1 (Sales)".to_string()
-                            />
-                        </Show>
-
-                        <EditableGrid
-                            dataset_name="Dataset 1".to_string()
-                            initial_data=uploaded_data1.into()
-                            on_data_change=Callback::new(move |data| set_grid_data1.set(data))
+                        <FileUpload
+                            on_dataset_loaded=Callback::new(move |ds: Dataset| {
+                                grid_data1.update(|rows| rows.extend(ds.records));
+                            })
+                            dataset_name="Dataset 1 (Sales)".to_string()
                         />
+                        <EditableGrid dataset_name="Dataset 1".to_string() data=grid_data1 />
                     </div>
 
                     <div>
-                        <Show when=move || grid_data2.get().is_empty() fallback=|| view! { <></> }>
-                            <FileUpload
-                                on_dataset_loaded=Callback::new(move |ds: Dataset| {
-                                    set_uploaded_data2.set(ds.records);
-                                })
-                                dataset_name="Dataset 2 (Payments)".to_string()
-                            />
-                        </Show>
-
-                        <EditableGrid
-                            dataset_name="Dataset 2".to_string()
-                            initial_data=uploaded_data2.into()
-                            on_data_change=Callback::new(move |data| set_grid_data2.set(data))
+                        <FileUpload
+                            on_dataset_loaded=Callback::new(move |ds: Dataset| {
+                                grid_data2.update(|rows| rows.extend(ds.records));
+                            })
+                            dataset_name="Dataset 2 (Payments)".to_string()
                         />
+                        <EditableGrid dataset_name="Dataset 2".to_string() data=grid_data2 />
                     </div>
                 </div>
-
-                // <div class="status">
-                // {move || {
-                // dataset1
-                // .get()
-                // .map(|ds| view! { <p>"Dataset 1: " {ds.records.len()} " records"</p> })
-                // }}
-                // {move || {
-                // dataset2
-                // .get()
-                // .map(|ds| view! { <p>"Dataset 2: " {ds.records.len()} " records"</p> })
-                // }}
-                // </div>
-
                 <button
                     class="compare-btn"
                     on:click=compare

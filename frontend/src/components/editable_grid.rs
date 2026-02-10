@@ -2,26 +2,10 @@ use data_comparer_shared::Record;
 use leptos::prelude::*;
 
 #[component]
-pub fn EditableGrid(
-    dataset_name: String,
-    initial_data: Signal<Vec<Record>>,
-    on_data_change: Callback<Vec<Record>>,
-) -> impl IntoView {
-    let (grid_data, set_grid_data) = signal(Vec::<Record>::new());
-
-    Effect::new(move |_| {
-        let data = initial_data.get();
-        set_grid_data.set(data);
-    });
-
-    Effect::new(move |_| {
-        let data = grid_data.get();
-        on_data_change.run(data);
-    });
-
+pub fn EditableGrid(dataset_name: String, data: RwSignal<Vec<Record>>) -> impl IntoView {
     let update_cell = move |row_idx: usize, field: String, value: String| {
-        set_grid_data.update(|data| {
-            if let Some(record) = data.get_mut(row_idx) {
+        data.update(|rows| {
+            if let Some(record) = rows.get_mut(row_idx) {
                 match field.as_str() {
                     "id" => record.id = value,
                     "name" => record.name = value,
@@ -37,14 +21,15 @@ pub fn EditableGrid(
     };
 
     let add_row = move |_| {
-        set_grid_data.update(|data| {
-            data.push(Record::new(String::new(), String::new(), 0.0));
+        data.update(|rows| {
+            rows.push(Record::new(String::new(), String::new(), 0.0));
         });
     };
 
     view! {
         <div class="editable-grid">
             <h3>{dataset_name}</h3>
+
             <table class="grid-table">
                 <thead>
                     <tr>
@@ -55,12 +40,13 @@ pub fn EditableGrid(
                 </thead>
                 <tbody>
                     <For
-                        each=move || grid_data.get().into_iter().enumerate()
+                        each=move || data.get().into_iter().enumerate()
                         key=|(idx, _)| *idx
                         children=move |(row_idx, record)| {
                             let id_val = record.id.clone();
                             let name_val = record.name.clone();
                             let amount_val = record.amount;
+
                             view! {
                                 <tr>
                                     <td>
@@ -76,6 +62,7 @@ pub fn EditableGrid(
                                             }
                                         />
                                     </td>
+
                                     <td>
                                         <input
                                             type="text"
@@ -89,6 +76,7 @@ pub fn EditableGrid(
                                             }
                                         />
                                     </td>
+
                                     <td>
                                         <input
                                             type="number"
@@ -109,6 +97,7 @@ pub fn EditableGrid(
                     />
                 </tbody>
             </table>
+
             <button on:click=add_row class="add-row-btn">
                 "+ Add Row"
             </button>

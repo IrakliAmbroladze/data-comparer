@@ -5,6 +5,7 @@ use leptos::reactive::spawn_local;
 use leptos::serde_json;
 
 mod components;
+use components::editable_grid::EditableGrid;
 use components::file_upload::FileUpload;
 use components::results_display::ResultsDisplay;
 
@@ -76,6 +77,7 @@ fn App() -> impl IntoView {
                         on_dataset_loaded=Callback::new(move |ds| set_dataset2.set(Some(ds)))
                         dataset_name="Dataset 2 (Payments)".to_string()
                     />
+                    <EditableGrid />
                 </div>
 
                 <div class="status">

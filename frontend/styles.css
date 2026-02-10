@@ -76,6 +76,20 @@ section {
   border-radius: 8px;
 }
 
-.grid-table {
-  margin: 10px;
+.grid-table input {
+  width: 90%;
+  border: 1px solid #ddd;
+  padding: 4px;
+}
+
+.grid-table input:focus {
+  outline: 2px solid #4caf50;
+}
+
+.add-row-btn {
+  margin-top: 10px;
+  background: #50c878;
+  color: white;
+  border-radius: 4px;
+  border: none;
 }

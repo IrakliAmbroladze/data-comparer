@@ -105,6 +105,7 @@ pub fn EditableGrid(
                     />
                 </tbody>
             </table>
+            <button class="add-row-btn">"+ Add Row"</button>
         </div>
     }
 }

@@ -1,10 +1,11 @@
-use data_comparer_shared::{ComparisonResult, Dataset};
+use data_comparer_shared::{ComparisonResult, Dataset, Record};
 use gloo_net::http::Request;
 use leptos::prelude::*;
 use leptos::reactive::spawn_local;
 use leptos::serde_json;
 
 mod components;
+use components::editable_grid::EditableGrid;
 use components::file_upload::FileUpload;
 use components::results_display::ResultsDisplay;
 
@@ -16,46 +17,61 @@ fn api_url() -> String {
 
 #[component]
 fn App() -> impl IntoView {
-    let (dataset1, set_dataset1) = signal(None::<Dataset>);
-    let (dataset2, set_dataset2) = signal(None::<Dataset>);
+    let grid_data1 = RwSignal::new(Vec::<Record>::new());
+    let grid_data2 = RwSignal::new(Vec::<Record>::new());
+
     let (result, set_result) = signal(None::<ComparisonResult>);
     let (loading, set_loading) = signal(false);
 
     let compare = move |_| {
-        if let (Some(ds1), Some(ds2)) = (dataset1.get(), dataset2.get()) {
-            set_loading.set(true);
+        let ds1 = grid_data1.get();
+        let ds2 = grid_data2.get();
+        if ds1.is_empty() || ds2.is_empty() {
+            return;
+        }
+        set_loading.set(true);
 
-            spawn_local(async move {
-                let body = serde_json::json!({
-                    "dataset1": ds1,
-                    "dataset2": ds2,
-                });
+        spawn_local(async move {
+            let body = serde_json::json!({
+                "dataset1": {
+                    "name": "Dataset 1",
+                    "records": ds1
+                },
+                "dataset2": {
+                    "name": "Dataset 2",
+                    "records": ds2
+                }
+            });
+            let response = Request::post(&format!("{}/compare", api_url()))
+                .header("Content-Type", "application/json")
+                .body(body.to_string())
+                .expect("Failed to build request")
+                .send()
+                .await;
 
-                let response = Request::post(&format!("{}/compare", api_url()))
-                    .header("Content-Type", "application/json")
-                    .body(body.to_string())
-                    .expect("Failed to build request")
-                    .send()
-                    .await;
-
-                match response {
-                    Ok(resp) => {
-                        if resp.ok() {
-                            if let Ok(json) = resp.json::<serde_json::Value>().await {
-                                if let Ok(comp_result) = serde_json::from_value::<ComparisonResult>(
-                                    json["result"].clone(),
-                                ) {
-                                    set_result.set(Some(comp_result));
-                                }
+            match response {
+                Ok(resp) => {
+                    if resp.ok() {
+                        if let Ok(json) = resp.json::<serde_json::Value>().await {
+                            if let Ok(comp_result) =
+                                serde_json::from_value::<ComparisonResult>(json["result"].clone())
+                            {
+                                set_result.set(Some(comp_result));
                             }
                         }
                     }
-                    Err(_) => {}
                 }
+                Err(_) => {}
+            }
 
-                set_loading.set(false);
-            });
-        }
+            set_loading.set(false);
+        });
+    };
+
+    let clear = move |_| {
+        grid_data1.set(vec![]);
+        grid_data2.set(vec![]);
+        set_result.set(None);
     };
 
     view! {
@@ -63,39 +79,45 @@ fn App() -> impl IntoView {
             <header>
                 <h1>"Data Comparer"</h1>
                 <p>"Compare two datasets by ID"</p>
+                <button
+                    class="compare-btn"
+                    on:click=clear
+                    disabled=move || {
+                        grid_data1.get().is_empty() && grid_data2.get().is_empty() || loading.get()
+                    }
+                >
+                    {move || if loading.get() { "refreshing..." } else { "clear datasets" }}
+                </button>
+
             </header>
 
             <main>
                 <div class="upload-section">
-                    <FileUpload
-                        on_dataset_loaded=Callback::new(move |ds| set_dataset1.set(Some(ds)))
-                        dataset_name="Dataset 1 (Sales)".to_string()
-                    />
+                    <div>
+                        <FileUpload
+                            on_dataset_loaded=Callback::new(move |ds: Dataset| {
+                                grid_data1.update(|rows| rows.extend(ds.records));
+                            })
+                            dataset_name="Dataset 1 (Sales)".to_string()
+                        />
+                        <EditableGrid dataset_name="Dataset 1".to_string() data=grid_data1 />
+                    </div>
 
-                    <FileUpload
-                        on_dataset_loaded=Callback::new(move |ds| set_dataset2.set(Some(ds)))
-                        dataset_name="Dataset 2 (Payments)".to_string()
-                    />
+                    <div>
+                        <FileUpload
+                            on_dataset_loaded=Callback::new(move |ds: Dataset| {
+                                grid_data2.update(|rows| rows.extend(ds.records));
+                            })
+                            dataset_name="Dataset 2 (Payments)".to_string()
+                        />
+                        <EditableGrid dataset_name="Dataset 2".to_string() data=grid_data2 />
+                    </div>
                 </div>
-
-                <div class="status">
-                    {move || {
-                        dataset1
-                            .get()
-                            .map(|ds| view! { <p>"Dataset 1: " {ds.records.len()} " records"</p> })
-                    }}
-                    {move || {
-                        dataset2
-                            .get()
-                            .map(|ds| view! { <p>"Dataset 2: " {ds.records.len()} " records"</p> })
-                    }}
-                </div>
-
                 <button
                     class="compare-btn"
                     on:click=compare
                     disabled=move || {
-                        dataset1.get().is_none() || dataset2.get().is_none() || loading.get()
+                        grid_data1.get().is_empty() || grid_data2.get().is_empty() || loading.get()
                     }
                 >
                     {move || if loading.get() { "Comparing..." } else { "Compare Datasets" }}

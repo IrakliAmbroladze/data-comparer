@@ -11,9 +11,7 @@ pub fn EditableGrid(
 
     Effect::new(move |_| {
         let data = initial_data.get();
-        if !data.is_empty() {
-            set_grid_data.set(data);
-        }
+        set_grid_data.set(data);
     });
 
     Effect::new(move |_| {

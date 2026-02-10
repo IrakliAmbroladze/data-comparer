@@ -71,11 +71,35 @@ fn App() -> impl IntoView {
         });
     };
 
+    let clear = move |_| {
+        set_loading.set(true);
+
+        set_uploaded_data1.set(Vec::<Record>::new());
+        set_uploaded_data2.set(Vec::<Record>::new());
+
+        set_grid_data1.set(Vec::<Record>::new());
+        set_grid_data2.set(Vec::<Record>::new());
+
+        set_result.set(None);
+
+        set_loading.set(false);
+    };
+
     view! {
         <div class="container">
             <header>
                 <h1>"Data Comparer"</h1>
                 <p>"Compare two datasets by ID"</p>
+                <button
+                    class="compare-btn"
+                    on:click=clear
+                    disabled=move || {
+                        grid_data1.get().is_empty() && grid_data2.get().is_empty() || loading.get()
+                    }
+                >
+                    {move || if loading.get() { "refreshing..." } else { "clear datasets" }}
+                </button>
+
             </header>
 
             <main>

@@ -77,7 +77,8 @@ fn App() -> impl IntoView {
                         on_dataset_loaded=Callback::new(move |ds| set_dataset2.set(Some(ds)))
                         dataset_name="Dataset 2 (Payments)".to_string()
                     />
-                    <EditableGrid />
+                    <EditableGrid dataset_name="Dataset 1".to_string() />
+                    <EditableGrid dataset_name="Dataset 2".to_string() />
                 </div>
 
                 <div class="status">

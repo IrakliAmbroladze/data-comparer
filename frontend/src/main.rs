@@ -81,12 +81,14 @@ fn App() -> impl IntoView {
             <main>
                 <div class="upload-section">
                     <div>
-                        <FileUpload
-                            on_dataset_loaded=Callback::new(move |ds: Dataset| {
-                                set_uploaded_data1.set(ds.records);
-                            })
-                            dataset_name="Dataset 1 (Sales)".to_string()
-                        />
+                        <Show when=move || grid_data1.get().is_empty() fallback=|| view! { <></> }>
+                            <FileUpload
+                                on_dataset_loaded=Callback::new(move |ds: Dataset| {
+                                    set_uploaded_data1.set(ds.records);
+                                })
+                                dataset_name="Dataset 1 (Sales)".to_string()
+                            />
+                        </Show>
 
                         <EditableGrid
                             dataset_name="Dataset 1".to_string()
@@ -96,12 +98,15 @@ fn App() -> impl IntoView {
                     </div>
 
                     <div>
-                        <FileUpload
-                            on_dataset_loaded=Callback::new(move |ds: Dataset| {
-                                set_uploaded_data2.set(ds.records);
-                            })
-                            dataset_name="Dataset 2 (Payments)".to_string()
-                        />
+                        <Show when=move || grid_data2.get().is_empty() fallback=|| view! { <></> }>
+                            <FileUpload
+                                on_dataset_loaded=Callback::new(move |ds: Dataset| {
+                                    set_uploaded_data2.set(ds.records);
+                                })
+                                dataset_name="Dataset 2 (Payments)".to_string()
+                            />
+                        </Show>
+
                         <EditableGrid
                             dataset_name="Dataset 2".to_string()
                             initial_data=uploaded_data2.into()

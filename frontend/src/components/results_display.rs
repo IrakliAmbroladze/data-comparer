@@ -27,9 +27,26 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
 
     let filtered_unmatched1 = move || {
         let mut data = unmatched1.clone();
+
         let f_id = filter_u1_id.get().to_lowercase();
         let f_name = filter_u1_name.get().to_lowercase();
         let f_amount = filter_u1_amount.get().to_lowercase();
+
+        data.retain(|r| {
+            (f_id.is_empty() || r.id.to_lowercase().contains(&f_id))
+                && (f_name.is_empty() || r.name.to_lowercase().contains(&f_name))
+                && (f_amount.is_empty() || format!("{:.2}", r.amount).contains(&f_amount))
+        });
+
+        data
+    };
+
+    let filtered_unmatched2 = move || {
+        let mut data = unmatched2.clone();
+
+        let f_id = filter_u2_id.get().to_lowercase();
+        let f_name = filter_u2_name.get().to_lowercase();
+        let f_amount = filter_u2_amount.get().to_lowercase();
 
         data.retain(|r| {
             (f_id.is_empty() || r.id.to_lowercase().contains(&f_id))
@@ -195,7 +212,7 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                     <tbody>
                         {move || {
                             filtered_unmatched1()
-                                .iter()
+                                .into_iter()
                                 .map(|r| {
                                     let id = r.id.clone();
                                     let name = r.name.clone();
@@ -257,23 +274,24 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                         </tr>
                     </thead>
                     <tbody>
-                        {result
-                            .unmatched_from_second
-                            .iter()
-                            .map(|r| {
-                                let id = r.id.clone();
-                                let name = r.name.clone();
-                                let amount = r.amount;
+                        {move || {
+                            filtered_unmatched2()
+                                .into_iter()
+                                .map(|r| {
+                                    let id = r.id.clone();
+                                    let name = r.name.clone();
+                                    let amount = r.amount;
 
-                                view! {
-                                    <tr>
-                                        <td>{id}</td>
-                                        <td>{name}</td>
-                                        <td>{format!("{:.2}", amount)}</td>
-                                    </tr>
-                                }
-                            })
-                            .collect_view()}
+                                    view! {
+                                        <tr>
+                                            <td>{id}</td>
+                                            <td>{name}</td>
+                                            <td>{format!("{:.2}", amount)}</td>
+                                        </tr>
+                                    }
+                                })
+                                .collect_view()
+                        }}
                     </tbody>
                 </table>
             </section>

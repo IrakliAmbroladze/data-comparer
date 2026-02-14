@@ -39,19 +39,39 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                         </tr>
                         <tr class="filter-row">
                             <th>
-                                <input type="text" placeholder="Filter ID..." />
+                                <input
+                                    type="text"
+                                    placeholder="Filter ID..."
+                                    class="column-filter"
+                                />
                             </th>
                             <th>
-                                <input type="text" placeholder="Filter Name..." />
+                                <input
+                                    type="text"
+                                    placeholder="Filter Name..."
+                                    class="column-filter"
+                                />
                             </th>
                             <th>
-                                <input type="text" placeholder="Filter Amount..." />
+                                <input
+                                    type="text"
+                                    placeholder="Filter Amount..."
+                                    class="column-filter"
+                                />
                             </th>
                             <th>
-                                <input type="text" placeholder="Filter Name..." />
+                                <input
+                                    type="text"
+                                    placeholder="Filter Name..."
+                                    class="column-filter"
+                                />
                             </th>
                             <th>
-                                <input type="text" placeholder="Filter Amount..." />
+                                <input
+                                    type="text"
+                                    placeholder="Filter Amount..."
+                                    class="column-filter"
+                                />
                             </th>
                             <th></th>
                         </tr>

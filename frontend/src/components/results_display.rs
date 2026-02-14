@@ -6,6 +6,12 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
     let matched = result.matched.clone();
     let matched_count = matched.len();
 
+    let (filter_id, set_filter_id) = signal(String::new());
+    let (filter_name1, set_filter_name1) = signal(String::new());
+    let (filter_amount1, set_filter_amount1) = signal(String::new());
+    let (filter_name2, set_filter_name2) = signal(String::new());
+    let (filter_amount2, set_filter_amount2) = signal(String::new());
+
     let toggle_sort = move |column: &'static str| {
         move |_| {
             log!("clicked on {}", column);
@@ -42,6 +48,7 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                 <input
                                     type="text"
                                     placeholder="Filter ID..."
+                                    on:input=move |ev| set_filter_id.set(event_target_value(&ev))
                                     class="column-filter"
                                 />
                             </th>
@@ -49,6 +56,7 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                 <input
                                     type="text"
                                     placeholder="Filter Name..."
+                                    on:input=move |ev| set_filter_name1.set(event_target_value(&ev))
                                     class="column-filter"
                                 />
                             </th>
@@ -56,6 +64,9 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                 <input
                                     type="text"
                                     placeholder="Filter Amount..."
+                                    on:input=move |ev| {
+                                        set_filter_amount1.set(event_target_value(&ev))
+                                    }
                                     class="column-filter"
                                 />
                             </th>
@@ -63,6 +74,7 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                 <input
                                     type="text"
                                     placeholder="Filter Name..."
+                                    on:input=move |ev| set_filter_name2.set(event_target_value(&ev))
                                     class="column-filter"
                                 />
                             </th>
@@ -70,6 +82,9 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                 <input
                                     type="text"
                                     placeholder="Filter Amount..."
+                                    on:input=move |ev| {
+                                        set_filter_amount2.set(event_target_value(&ev))
+                                    }
                                     class="column-filter"
                                 />
                             </th>

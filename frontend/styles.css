@@ -102,3 +102,7 @@ section {
 .sortable:hover {
   background-color: #e0e0e0;
 }
+
+.filter-row {
+  background-color: #f9f9f9;
+}

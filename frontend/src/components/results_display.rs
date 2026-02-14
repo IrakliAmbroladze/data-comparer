@@ -37,6 +37,24 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                 "Difference"
                             </th>
                         </tr>
+                        <tr class="filter-row">
+                            <th>
+                                <input type="text" placeholder="Filter ID..." />
+                            </th>
+                            <th>
+                                <input type="text" placeholder="Filter Name..." />
+                            </th>
+                            <th>
+                                <input type="text" placeholder="Filter Amount..." />
+                            </th>
+                            <th>
+                                <input type="text" placeholder="Filter Name..." />
+                            </th>
+                            <th>
+                                <input type="text" placeholder="Filter Amount..." />
+                            </th>
+                            <th></th>
+                        </tr>
                     </thead>
                     <tbody>
                         {result

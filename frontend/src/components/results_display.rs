@@ -12,6 +12,10 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
     let (filter_name2, set_filter_name2) = signal(String::new());
     let (filter_amount2, set_filter_amount2) = signal(String::new());
 
+    let (filter_u1_id, set_filter_u1_id) = signal(String::new());
+    let (filter_u1_name, set_filter_u1_name) = signal(String::new());
+    let (filter_u1_amount, set_filter_u1_amount) = signal(String::new());
+
     let toggle_sort = move |column: &'static str| {
         move |_| {
             log!("clicked on {}", column);
@@ -131,6 +135,36 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                             <th>"ID"</th>
                             <th>"Name"</th>
                             <th>"Amount"</th>
+                        </tr>
+                        <tr class="filter-row">
+                            <th>
+                                <input
+                                    type="text"
+                                    placeholder="Filter ID..."
+                                    on:input=move |ev| set_filter_u1_id.set(event_target_value(&ev))
+                                    class="column-filter"
+                                />
+                            </th>
+                            <th>
+                                <input
+                                    type="text"
+                                    placeholder="Filter Name..."
+                                    on:input=move |ev| {
+                                        set_filter_u1_name.set(event_target_value(&ev))
+                                    }
+                                    class="column-filter"
+                                />
+                            </th>
+                            <th>
+                                <input
+                                    type="text"
+                                    placeholder="Filter Amount..."
+                                    on:input=move |ev| {
+                                        set_filter_u1_amount.set(event_target_value(&ev))
+                                    }
+                                    class="column-filter"
+                                />
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

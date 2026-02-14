@@ -25,6 +25,26 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
     let (filter_u2_name, set_filter_u2_name) = signal(String::new());
     let (filter_u2_amount, set_filter_u2_amount) = signal(String::new());
 
+    let filtered_matched = move || {
+        let mut data = matched.clone();
+
+        let f_id = filter_id.get().to_lowercase();
+        let f_name1 = filter_name1.get().to_lowercase();
+        let f_amount1 = filter_amount1.get().to_lowercase();
+        let f_name2 = filter_name2.get().to_lowercase();
+        let f_amount2 = filter_amount2.get().to_lowercase();
+
+        data.retain(|r| {
+            (f_id.is_empty() || r.id.to_lowercase().contains(&f_id))
+                && (f_name1.is_empty() || r.first_name.to_lowercase().contains(&f_name1))
+                && (f_amount1.is_empty() || format!("{:.2}", r.first_amount).contains(&f_amount1))
+                && (f_name2.is_empty() || r.second_name.to_lowercase().contains(&f_name2))
+                && (f_amount2.is_empty() || format!("{:.2}", r.second_amount).contains(&f_amount2))
+        });
+
+        data
+    };
+
     let filtered_unmatched1 = move || {
         let mut data = unmatched1.clone();
 
@@ -137,33 +157,34 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                         </tr>
                     </thead>
                     <tbody>
-                        {result
-                            .matched
-                            .iter()
-                            .map(|m| {
-                                let id = m.id.clone();
-                                let first_name = m.first_name.clone();
-                                let first_amount = m.first_amount;
-                                let second_name = m.second_name.clone();
-                                let second_amount = m.second_amount;
-                                let diff = m.amount_difference;
+                        {move || {
+                            filtered_matched()
+                                .into_iter()
+                                .map(|m| {
+                                    let id = m.id.clone();
+                                    let first_name = m.first_name.clone();
+                                    let first_amount = m.first_amount;
+                                    let second_name = m.second_name.clone();
+                                    let second_amount = m.second_amount;
+                                    let diff = m.amount_difference;
 
-                                view! {
-                                    <tr>
-                                        <td>{id}</td>
-                                        <td>{first_name}</td>
-                                        <td>{format!("{:.2}", first_amount)}</td>
-                                        <td>{second_name}</td>
-                                        <td>{format!("{:.2}", second_amount)}</td>
-                                        <td class=if diff < 0.0 {
-                                            "diff-red"
-                                        } else {
-                                            "diff-green"
-                                        }>{format!("{:.2}", diff)}</td>
-                                    </tr>
-                                }
-                            })
-                            .collect_view()}
+                                    view! {
+                                        <tr>
+                                            <td>{id}</td>
+                                            <td>{first_name}</td>
+                                            <td>{format!("{:.2}", first_amount)}</td>
+                                            <td>{second_name}</td>
+                                            <td>{format!("{:.2}", second_amount)}</td>
+                                            <td class=if diff < 0.0 {
+                                                "diff-red"
+                                            } else {
+                                                "diff-green"
+                                            }>{format!("{:.2}", diff)}</td>
+                                        </tr>
+                                    }
+                                })
+                                .collect_view()
+                        }}
                     </tbody>
                 </table>
             </section>

@@ -1,5 +1,5 @@
 use data_comparer_shared::ComparisonResult;
-use leptos::{logging::log, prelude::*};
+use leptos::prelude::*;
 
 #[component]
 pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
@@ -25,6 +25,9 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
     let (filter_u2_name, set_filter_u2_name) = signal(String::new());
     let (filter_u2_amount, set_filter_u2_amount) = signal(String::new());
 
+    let (matched_sort, set_matched_sort) = signal("id".to_string());
+    let (matched_sort_desc, set_matched_sort_desc) = signal(false);
+
     let filtered_matched = move || {
         let mut data = matched.clone();
 
@@ -40,6 +43,28 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                 && (f_amount1.is_empty() || format!("{:.2}", r.first_amount).contains(&f_amount1))
                 && (f_name2.is_empty() || r.second_name.to_lowercase().contains(&f_name2))
                 && (f_amount2.is_empty() || format!("{:.2}", r.second_amount).contains(&f_amount2))
+        });
+
+        let sort_by = matched_sort.get();
+        let desc = matched_sort_desc.get();
+        data.sort_by(|a, b| {
+            let cmp = match sort_by.as_str() {
+                "id" => a.id.cmp(&b.id),
+                "name" => a.first_name.cmp(&b.first_name),
+                "amount1" => a.first_amount.partial_cmp(&b.first_amount).unwrap(),
+                "amount2" => a.second_amount.partial_cmp(&b.second_amount).unwrap(),
+                "diff" => a
+                    .amount_difference
+                    .abs()
+                    .partial_cmp(&b.amount_difference.abs())
+                    .unwrap(),
+                _ => std::cmp::Ordering::Equal,
+            };
+            if desc {
+                cmp.reverse()
+            } else {
+                cmp
+            }
         });
 
         data
@@ -79,7 +104,12 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
 
     let toggle_sort = move |column: &'static str| {
         move |_| {
-            log!("clicked on {}", column);
+            if matched_sort.get() == column {
+                set_matched_sort_desc.update(|d| *d = !*d);
+            } else {
+                set_matched_sort.set(column.to_string());
+                set_matched_sort_desc.set(false);
+            }
         }
     };
     view! {

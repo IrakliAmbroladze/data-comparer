@@ -62,6 +62,10 @@ th {
   color: red;
   font-weight: bold;
 }
+.diff-brown {
+  color: #e58325;
+  font-weight: bold;
+}
 .diff-green {
   color: #097969;
   font-weight: bold;

@@ -197,7 +197,6 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                     let second_name = m.second_name.clone();
                                     let second_amount = m.second_amount;
                                     let diff = m.amount_difference;
-
                                     view! {
                                         <tr>
                                             <td>{id}</td>
@@ -205,10 +204,14 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                             <td>{format!("{:.2}", first_amount)}</td>
                                             <td>{second_name}</td>
                                             <td>{format!("{:.2}", second_amount)}</td>
-                                            <td class=if diff < 0.0 {
-                                                "diff-red"
-                                            } else {
-                                                "diff-green"
+                                            <td class=move || {
+                                                if diff < 0.0 {
+                                                    "diff-red"
+                                                } else if diff > 0.0 {
+                                                    "diff-brown"
+                                                } else {
+                                                    "diff-green"
+                                                }
                                             }>{format!("{:.2}", diff)}</td>
                                         </tr>
                                     }

@@ -3,12 +3,14 @@ use leptos::prelude::*;
 
 #[component]
 pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
+    let matched = result.matched.clone();
+    let matched_count = matched.len();
     view! {
         <div class="results">
             <h2>"Comparison Results"</h2>
 
             <section>
-                <h3>"Matched Records (" {result.matched.len()} ")"</h3>
+                <h3>"Matched Records (" {matched_count} ")"</h3>
                 <table>
                     <thead>
                         <tr>

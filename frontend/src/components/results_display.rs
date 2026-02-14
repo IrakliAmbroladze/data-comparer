@@ -14,12 +14,12 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                 <table>
                     <thead>
                         <tr>
-                            <th>"ID"</th>
-                            <th>"Name (Dataset 1)"</th>
-                            <th>"Amount (Dataset 1)"</th>
+                            <th class="sortable">"ID"</th>
+                            <th class="sortable">"Name (Dataset 1)"</th>
+                            <th class="sortable">"Amount (Dataset 1)"</th>
                             <th>"Name (Dataset 2)"</th>
-                            <th>"Amount (Dataset 2)"</th>
-                            <th>"Difference"</th>
+                            <th class="sortable">"Amount (Dataset 2)"</th>
+                            <th class="sortable">"Difference"</th>
                         </tr>
                     </thead>
                     <tbody>

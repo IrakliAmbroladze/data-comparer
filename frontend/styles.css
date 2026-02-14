@@ -93,3 +93,12 @@ section {
   border-radius: 4px;
   border: none;
 }
+
+.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.sortable:hover {
+  background-color: #e0e0e0;
+}

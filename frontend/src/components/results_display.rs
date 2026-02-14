@@ -4,7 +4,12 @@ use leptos::{logging::log, prelude::*};
 #[component]
 pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
     let matched = result.matched.clone();
+    let unmatched1 = result.unmatched_from_first.clone();
+    let unmatched2 = result.unmatched_from_second.clone();
+
     let matched_count = matched.len();
+    let unmatched1_count = unmatched1.len();
+    let unmatched2_count = unmatched2.len();
 
     let (filter_id, set_filter_id) = signal(String::new());
     let (filter_name1, set_filter_name1) = signal(String::new());
@@ -132,7 +137,8 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
             </section>
 
             <section>
-                <h3>"Unmatched from Dataset 1 (" {result.unmatched_from_first.len()} ")"</h3>
+                <h3>"Unmatched from Dataset 1 (" {unmatched1_count} ")"</h3>
+
                 <table>
                     <thead>
                         <tr>
@@ -194,7 +200,8 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
             </section>
 
             <section>
-                <h3>"Unmatched from Dataset 2 (" {result.unmatched_from_second.len()} ")"</h3>
+                <h3>"Unmatched from Dataset 2 (" {unmatched2_count} ")"</h3>
+
                 <table>
                     <thead>
                         <tr>

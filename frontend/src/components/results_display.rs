@@ -55,8 +55,9 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
         data.sort_by(|a, b| {
             let cmp = match sort_by.as_str() {
                 "id" => a.id.cmp(&b.id),
-                "name" => a.first_name.cmp(&b.first_name),
+                "name1" => a.first_name.cmp(&b.first_name),
                 "amount1" => a.first_amount.partial_cmp(&b.first_amount).unwrap(),
+                "name2" => a.second_name.cmp(&b.second_name),
                 "amount2" => a.second_amount.partial_cmp(&b.second_amount).unwrap(),
                 "diff" => a
                     .amount_difference
@@ -129,13 +130,15 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                             <th on:click=toggle_sort("id") class="sortable">
                                 "ID"
                             </th>
-                            <th on:click=toggle_sort("name") class="sortable">
+                            <th on:click=toggle_sort("name1") class="sortable">
                                 "Name (Dataset 1)"
                             </th>
                             <th on:click=toggle_sort("amount1") class="sortable">
                                 "Amount (Dataset 1)"
                             </th>
-                            <th>"Name (Dataset 2)"</th>
+                            <th on:click=toggle_sort("name2") class="sortable">
+                                "Name (Dataset 2)"
+                            </th>
                             <th on:click=toggle_sort("amount2") class="sortable">
                                 "Amount (Dataset 2)"
                             </th>

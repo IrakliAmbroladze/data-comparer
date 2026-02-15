@@ -79,16 +79,31 @@ fn App() -> impl IntoView {
             <header>
                 <h1>"Data Comparer"</h1>
                 <p>"Compare two datasets by ID"</p>
-                <button
-                    class="compare-btn"
-                    on:click=clear
-                    disabled=move || {
-                        grid_data1.get().is_empty() && grid_data2.get().is_empty() || loading.get()
-                    }
-                >
-                    {move || if loading.get() { "refreshing..." } else { "clear datasets" }}
-                </button>
-
+                <div class="description">
+                    "Upload two files with extension of: CSV, XLSX, or XLSM. Each file has to have just three columns with headers: id, name and amount. Compare datasets by ID with automatic aggregation. View matched records with amount differences. See unmatched records from both datasets. Example: Dataset 1 (Sales): ID: 123, Name: Company A, Amount: 200, Dataset 2 (Payments): ID: 123, Name: Company A, Amount: 20, ID: 123, Name: Company A, Amount: 40. Result: Matched: ID 123, Sales: 200, Payments: 60 (summed), Difference: -140"
+                </div>
+                <div class="database-btns-container">
+                    <button
+                        class="compare-btn"
+                        on:click=compare
+                        disabled=move || {
+                            grid_data1.get().is_empty() || grid_data2.get().is_empty()
+                                || loading.get()
+                        }
+                    >
+                        {move || if loading.get() { "Comparing..." } else { "Compare Datasets" }}
+                    </button>
+                    <button
+                        class="compare-btn"
+                        on:click=clear
+                        disabled=move || {
+                            grid_data1.get().is_empty() && grid_data2.get().is_empty()
+                                || loading.get()
+                        }
+                    >
+                        {move || if loading.get() { "refreshing..." } else { "clear datasets" }}
+                    </button>
+                </div>
             </header>
 
             <main>
@@ -113,15 +128,6 @@ fn App() -> impl IntoView {
                         <EditableGrid dataset_name="Dataset 2".to_string() data=grid_data2 />
                     </div>
                 </div>
-                <button
-                    class="compare-btn"
-                    on:click=compare
-                    disabled=move || {
-                        grid_data1.get().is_empty() || grid_data2.get().is_empty() || loading.get()
-                    }
-                >
-                    {move || if loading.get() { "Comparing..." } else { "Compare Datasets" }}
-                </button>
 
                 {move || result.get().map(|r| view! { <ResultsDisplay result=r /> })}
             </main>

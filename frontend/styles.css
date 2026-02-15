@@ -62,6 +62,10 @@ th {
   color: red;
   font-weight: bold;
 }
+.diff-brown {
+  color: #e58325;
+  font-weight: bold;
+}
 .diff-green {
   color: #097969;
   font-weight: bold;
@@ -101,4 +105,28 @@ section {
 
 .sortable:hover {
   background-color: #e0e0e0;
+}
+
+.filter-row {
+  background-color: #f9f9f9;
+}
+
+.column-filter {
+  width: 95%;
+  padding: 4px;
+  font-size: 12px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+.database-btns-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+
+.description {
+  font-size: 10px;
+  color: gray;
 }

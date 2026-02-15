@@ -1,7 +1,7 @@
 use data_comparer_shared::ComparisonResult;
 use leptos::prelude::*;
 
-use crate::components::filterable_table::DiffCell;
+use crate::components::filterable_table::{ColumnFilter, DiffCell};
 
 #[component]
 pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
@@ -18,6 +18,7 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
     let (filter_amount1, set_filter_amount1) = signal(String::new());
     let (filter_name2, set_filter_name2) = signal(String::new());
     let (filter_amount2, set_filter_amount2) = signal(String::new());
+    let (filter_diff, set_filter_diff) = signal(String::new());
 
     let (filter_u1_id, set_filter_u1_id) = signal(String::new());
     let (filter_u1_name, set_filter_u1_name) = signal(String::new());
@@ -38,6 +39,7 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
         let f_amount1 = filter_amount1.get().to_lowercase();
         let f_name2 = filter_name2.get().to_lowercase();
         let f_amount2 = filter_amount2.get().to_lowercase();
+        let f_diff = filter_diff.get().to_lowercase();
 
         data.retain(|r| {
             (f_id.is_empty() || r.id.to_lowercase().contains(&f_id))
@@ -45,6 +47,7 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                 && (f_amount1.is_empty() || format!("{:.2}", r.first_amount).contains(&f_amount1))
                 && (f_name2.is_empty() || r.second_name.to_lowercase().contains(&f_name2))
                 && (f_amount2.is_empty() || format!("{:.2}", r.second_amount).contains(&f_amount2))
+                && (f_diff.is_empty() || format!("{:.2}", r.amount_difference).contains(&f_diff))
         });
 
         let sort_by = matched_sort.get();
@@ -142,50 +145,41 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                         </tr>
                         <tr class="filter-row">
                             <th>
-                                <input
-                                    type="text"
-                                    placeholder="Filter ID..."
-                                    on:input=move |ev| set_filter_id.set(event_target_value(&ev))
-                                    class="column-filter"
+                                <ColumnFilter
+                                    placeholder="Filter ID...".to_string()
+                                    on_change=Callback::new(move |val| set_filter_id.set(val))
                                 />
                             </th>
                             <th>
-                                <input
-                                    type="text"
-                                    placeholder="Filter Name..."
-                                    on:input=move |ev| set_filter_name1.set(event_target_value(&ev))
-                                    class="column-filter"
+                                <ColumnFilter
+                                    placeholder="Filter Name...".to_string()
+                                    on_change=Callback::new(move |val| set_filter_name1.set(val))
                                 />
                             </th>
                             <th>
-                                <input
-                                    type="text"
-                                    placeholder="Filter Amount..."
-                                    on:input=move |ev| {
-                                        set_filter_amount1.set(event_target_value(&ev))
-                                    }
-                                    class="column-filter"
+                                <ColumnFilter
+                                    placeholder="Filter Amount...".to_string()
+                                    on_change=Callback::new(move |val| set_filter_amount1.set(val))
                                 />
                             </th>
                             <th>
-                                <input
-                                    type="text"
-                                    placeholder="Filter Name..."
-                                    on:input=move |ev| set_filter_name2.set(event_target_value(&ev))
-                                    class="column-filter"
+                                <ColumnFilter
+                                    placeholder="Filter Name...".to_string()
+                                    on_change=Callback::new(move |val| set_filter_name2.set(val))
                                 />
                             </th>
                             <th>
-                                <input
-                                    type="text"
-                                    placeholder="Filter Amount..."
-                                    on:input=move |ev| {
-                                        set_filter_amount2.set(event_target_value(&ev))
-                                    }
-                                    class="column-filter"
+                                <ColumnFilter
+                                    placeholder="Filter Amount...".to_string()
+                                    on_change=Callback::new(move |val| set_filter_amount2.set(val))
                                 />
                             </th>
-                            <th></th>
+                            <th>
+                                <ColumnFilter
+                                    placeholder="Filter Diff...".to_string()
+                                    on_change=Callback::new(move |val| set_filter_diff.set(val))
+                                />
+                            </th>
                         </tr>
                     </thead>
                     <tbody>

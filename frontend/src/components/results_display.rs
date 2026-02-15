@@ -1,6 +1,8 @@
 use data_comparer_shared::ComparisonResult;
 use leptos::prelude::*;
 
+use crate::components::filterable_table::DiffCell;
+
 #[component]
 pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
     let matched = result.matched.clone();
@@ -204,15 +206,7 @@ pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
                                             <td>{format!("{:.2}", first_amount)}</td>
                                             <td>{second_name}</td>
                                             <td>{format!("{:.2}", second_amount)}</td>
-                                            <td class=move || {
-                                                if diff < 0.0 {
-                                                    "diff-red"
-                                                } else if diff > 0.0 {
-                                                    "diff-brown"
-                                                } else {
-                                                    "diff-green"
-                                                }
-                                            }>{format!("{:.2}", diff)}</td>
+                                            <DiffCell value=diff />
                                         </tr>
                                     }
                                 })

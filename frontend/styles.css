@@ -125,3 +125,8 @@ section {
   justify-content: center;
   align-items: center;
 }
+
+.description {
+  font-size: 10px;
+  color: gray;
+}

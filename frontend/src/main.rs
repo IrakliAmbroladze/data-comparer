@@ -79,16 +79,28 @@ fn App() -> impl IntoView {
             <header>
                 <h1>"Data Comparer"</h1>
                 <p>"Compare two datasets by ID"</p>
-                <button
-                    class="compare-btn"
-                    on:click=clear
-                    disabled=move || {
-                        grid_data1.get().is_empty() && grid_data2.get().is_empty() || loading.get()
-                    }
-                >
-                    {move || if loading.get() { "refreshing..." } else { "clear datasets" }}
-                </button>
-
+                <div class="database-btns-container">
+                    <button
+                        class="compare-btn"
+                        on:click=compare
+                        disabled=move || {
+                            grid_data1.get().is_empty() || grid_data2.get().is_empty()
+                                || loading.get()
+                        }
+                    >
+                        {move || if loading.get() { "Comparing..." } else { "Compare Datasets" }}
+                    </button>
+                    <button
+                        class="compare-btn"
+                        on:click=clear
+                        disabled=move || {
+                            grid_data1.get().is_empty() && grid_data2.get().is_empty()
+                                || loading.get()
+                        }
+                    >
+                        {move || if loading.get() { "refreshing..." } else { "clear datasets" }}
+                    </button>
+                </div>
             </header>
 
             <main>
@@ -113,15 +125,6 @@ fn App() -> impl IntoView {
                         <EditableGrid dataset_name="Dataset 2".to_string() data=grid_data2 />
                     </div>
                 </div>
-                <button
-                    class="compare-btn"
-                    on:click=compare
-                    disabled=move || {
-                        grid_data1.get().is_empty() || grid_data2.get().is_empty() || loading.get()
-                    }
-                >
-                    {move || if loading.get() { "Comparing..." } else { "Compare Datasets" }}
-                </button>
 
                 {move || result.get().map(|r| view! { <ResultsDisplay result=r /> })}
             </main>

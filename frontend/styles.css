@@ -118,3 +118,10 @@ section {
   border: 1px solid #ccc;
   border-radius: 3px;
 }
+
+.database-btns-container {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}

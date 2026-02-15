@@ -1,4 +1,3 @@
-use data_comparer_shared::MatchedRecord;
 use leptos::prelude::*;
 
 #[component]

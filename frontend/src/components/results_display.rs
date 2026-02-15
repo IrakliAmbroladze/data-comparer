@@ -1,7 +1,6 @@
+use crate::components::matched_table::MatchedTable;
 use data_comparer_shared::ComparisonResult;
 use leptos::prelude::*;
-
-use crate::components::filterable_table::MatchedTable;
 
 #[component]
 pub fn ResultsDisplay(result: ComparisonResult) -> impl IntoView {
